@@ -1,130 +1,158 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="980" viewBox="0 0 1200 980" role="img" aria-labelledby="title desc">
-  <title id="title">Corrective RAG Flow Diagram</title>
-  <desc id="desc">A high-level flow diagram showing notebook progression and the final corrective RAG pipeline with retrieval evaluation, query rewrite, web search, refinement, and answer generation.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
   <defs>
-    <style>
-      .bg { fill: #f7f4ec; }
-      .title { font: 700 34px Arial, sans-serif; fill: #1f2937; }
-      .subtitle { font: 400 18px Arial, sans-serif; fill: #4b5563; }
-      .section { font: 700 22px Arial, sans-serif; fill: #111827; }
-      .label { font: 700 16px Arial, sans-serif; fill: #111827; }
-      .body { font: 400 14px Arial, sans-serif; fill: #374151; }
-      .small { font: 400 13px Arial, sans-serif; fill: #4b5563; }
-      .box { fill: #fffdf8; stroke: #1f2937; stroke-width: 2; rx: 18; ry: 18; }
-      .soft { fill: #fff7e6; stroke: #b45309; stroke-width: 2; rx: 18; ry: 18; }
-      .accent { fill: #eef6ff; stroke: #1d4ed8; stroke-width: 2; rx: 18; ry: 18; }
-      .green { fill: #eefbf3; stroke: #15803d; stroke-width: 2; rx: 18; ry: 18; }
-      .pink { fill: #fff1f2; stroke: #be123c; stroke-width: 2; rx: 18; ry: 18; }
-      .arrow { stroke: #374151; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
-      .dash { stroke: #6b7280; stroke-width: 2.5; fill: none; stroke-dasharray: 8 7; marker-end: url(#arrowhead); }
-    </style>
-    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#374151"/>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#475569"/>
     </marker>
+    <style>
+      text { font-family: Helvetica, Arial, sans-serif; }
+    </style>
   </defs>
 
-  <rect class="bg" x="0" y="0" width="1200" height="980"/>
+  <!-- Background -->
+  <rect width="1200" height="900" fill="#f5f3ee"/>
 
-  <text class="title" x="60" y="60">Corrective RAG With LangGraph</text>
-  <text class="subtitle" x="60" y="92">Notebook progression on top, final decision flow below</text>
+  <!-- Title -->
+  <text x="600" y="45" text-anchor="middle" font-size="26" font-weight="700" fill="#0f172a">Corrective RAG With LangGraph</text>
 
-  <text class="section" x="60" y="140">Notebook Progression</text>
+  <!-- ===== TOP PANEL: Notebook Progression ===== -->
+  <rect x="40" y="70" width="1120" height="220" rx="14" fill="#fcfbf8" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="65" y="100" font-size="15" font-weight="700" fill="#111827">Notebook Progression</text>
 
-  <rect class="box" x="60" y="170" width="160" height="110"/>
-  <text class="label" x="85" y="205">1. Basic RAG</text>
-  <text class="body" x="85" y="232">Load PDFs</text>
-  <text class="body" x="85" y="252">Retrieve top chunks</text>
-  <text class="body" x="85" y="272">Generate answer</text>
+  <!-- NB1 -->
+  <rect x="60" y="115" width="175" height="150" rx="10" fill="#fff" stroke="#334155" stroke-width="2"/>
+  <text x="147" y="140" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">1. Basic RAG</text>
+  <text x="147" y="162" text-anchor="middle" font-size="12" fill="#334155">Load PDFs</text>
+  <text x="147" y="180" text-anchor="middle" font-size="12" fill="#334155">Split into chunks</text>
+  <text x="147" y="198" text-anchor="middle" font-size="12" fill="#334155">Retrieve matches</text>
+  <text x="147" y="216" text-anchor="middle" font-size="12" fill="#334155">Generate answer</text>
 
-  <rect class="box" x="260" y="170" width="170" height="110"/>
-  <text class="label" x="285" y="205">2. Refinement</text>
-  <text class="body" x="285" y="232">Split retrieved text</text>
-  <text class="body" x="285" y="252">Keep useful sentences</text>
-  <text class="body" x="285" y="272">Answer from refined context</text>
+  <!-- Arrow 1->2 -->
+  <path d="M235 190 H265" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arr)"/>
 
-  <rect class="soft" x="470" y="170" width="180" height="110"/>
-  <text class="label" x="495" y="205">3. Evaluator</text>
-  <text class="body" x="495" y="232">Score each chunk</text>
-  <text class="body" x="495" y="252">CORRECT / INCORRECT</text>
-  <text class="body" x="495" y="272">/ AMBIGUOUS</text>
+  <!-- NB2 -->
+  <rect x="265" y="115" width="175" height="150" rx="10" fill="#fff" stroke="#334155" stroke-width="2"/>
+  <text x="352" y="140" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">2. Refinement</text>
+  <text x="352" y="162" text-anchor="middle" font-size="12" fill="#334155">Split context into</text>
+  <text x="352" y="180" text-anchor="middle" font-size="12" fill="#334155">sentences</text>
+  <text x="352" y="198" text-anchor="middle" font-size="12" fill="#334155">Keep useful strips</text>
+  <text x="352" y="216" text-anchor="middle" font-size="12" fill="#334155">Answer from refined</text>
 
-  <rect class="accent" x="690" y="170" width="180" height="110"/>
-  <text class="label" x="715" y="205">4. Web Fallback</text>
-  <text class="body" x="715" y="232">If retrieval is weak</text>
-  <text class="body" x="715" y="252">search Tavily</text>
-  <text class="body" x="715" y="272">then refine web docs</text>
+  <!-- Arrow 2->3 -->
+  <path d="M440 190 H470" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arr)"/>
 
-  <rect class="accent" x="910" y="170" width="180" height="110"/>
-  <text class="label" x="935" y="205">5. Query Rewrite</text>
-  <text class="body" x="935" y="232">Rewrite question</text>
-  <text class="body" x="935" y="252">into web-search query</text>
-  <text class="body" x="935" y="272">before Tavily search</text>
+  <!-- NB3 -->
+  <rect x="470" y="115" width="175" height="150" rx="10" fill="#fff8f0" stroke="#c2410c" stroke-width="2"/>
+  <text x="557" y="140" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">3. Evaluator</text>
+  <text x="557" y="162" text-anchor="middle" font-size="12" fill="#334155">Score each chunk</text>
+  <text x="557" y="180" text-anchor="middle" font-size="12" fill="#334155">Route by quality</text>
+  <text x="557" y="198" text-anchor="middle" font-size="12" fill="#334155">Correct / Incorrect</text>
+  <text x="557" y="216" text-anchor="middle" font-size="12" fill="#334155">/ Ambiguous</text>
 
-  <rect class="green" x="510" y="320" width="240" height="120"/>
-  <text class="label" x="545" y="357">6. Ambiguous Handling</text>
-  <text class="body" x="545" y="387">For mixed retrieval signals:</text>
-  <text class="body" x="545" y="410">keep internal good_docs</text>
-  <text class="body" x="545" y="433">and combine with web docs</text>
+  <!-- Arrow 3->4 -->
+  <path d="M645 190 H675" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arr)"/>
 
-  <path class="arrow" d="M 220 225 L 260 225"/>
-  <path class="arrow" d="M 430 225 L 470 225"/>
-  <path class="arrow" d="M 650 225 L 690 225"/>
-  <path class="arrow" d="M 870 225 L 910 225"/>
-  <path class="dash" d="M 1000 280 L 750 335"/>
+  <!-- NB4 -->
+  <rect x="675" y="115" width="175" height="150" rx="10" fill="#f8fbff" stroke="#2563eb" stroke-width="2"/>
+  <text x="762" y="140" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">4. Web Fallback</text>
+  <text x="762" y="162" text-anchor="middle" font-size="12" fill="#334155">Poor retrieval?</text>
+  <text x="762" y="180" text-anchor="middle" font-size="12" fill="#334155">Search the web</text>
+  <text x="762" y="198" text-anchor="middle" font-size="12" fill="#334155">Convert to docs</text>
+  <text x="762" y="216" text-anchor="middle" font-size="12" fill="#334155">Refine and answer</text>
 
-  <text class="section" x="60" y="520">Final Decision Flow In The Latest Notebook</text>
+  <!-- Arrow 4->5 -->
+  <path d="M850 190 H880" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arr)"/>
 
-  <rect class="box" x="70" y="560" width="165" height="95"/>
-  <text class="label" x="100" y="595">Load PDFs</text>
-  <text class="body" x="100" y="620">Split into chunks</text>
-  <text class="body" x="100" y="640">Create embeddings</text>
+  <!-- NB5 -->
+  <rect x="880" y="115" width="175" height="150" rx="10" fill="#f8fbff" stroke="#2563eb" stroke-width="2"/>
+  <text x="967" y="140" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">5. Query Rewrite</text>
+  <text x="967" y="162" text-anchor="middle" font-size="12" fill="#334155">Rewrite question</text>
+  <text x="967" y="180" text-anchor="middle" font-size="12" fill="#334155">into keyword query</text>
+  <text x="967" y="198" text-anchor="middle" font-size="12" fill="#334155">Better web search</text>
+  <text x="967" y="216" text-anchor="middle" font-size="12" fill="#334155">results</text>
 
-  <rect class="box" x="280" y="560" width="170" height="95"/>
-  <text class="label" x="310" y="595">Retrieve Top 4</text>
-  <text class="body" x="310" y="620">Similarity search</text>
-  <text class="body" x="310" y="640">from FAISS</text>
+  <!-- Arrow 5->6 (down) -->
+  <path d="M967 265 V285" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arr)"/>
 
-  <rect class="soft" x="500" y="550" width="220" height="115"/>
-  <text class="label" x="530" y="585">Evaluate Each Chunk</text>
-  <text class="body" x="530" y="610">LLM gives score 0.0 to 1.0</text>
-  <text class="body" x="530" y="632">good_docs = chunks with score &gt; 0.3</text>
-  <text class="body" x="530" y="654">verdict uses 0.7 and 0.3 thresholds</text>
+  <!-- NB6 (below NB5) -->
+  <rect x="855" y="285" width="245" height="110" rx="10" fill="#f3fbf5" stroke="#15803d" stroke-width="2"/>
+  <text x="977" y="308" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">6. Ambiguous Handling</text>
+  <text x="977" y="330" text-anchor="middle" font-size="12" fill="#334155">Keep weak internal chunks</text>
+  <text x="977" y="350" text-anchor="middle" font-size="12" fill="#334155">Combine with web results</text>
+  <text x="977" y="370" text-anchor="middle" font-size="12" fill="#334155">Refine merged evidence</text>
 
-  <path class="arrow" d="M 235 607 L 280 607"/>
-  <path class="arrow" d="M 450 607 L 500 607"/>
+  <!-- ===== BOTTOM PANEL: Final Flow ===== -->
+  <rect x="40" y="420" width="1120" height="460" rx="14" fill="#fcfbf8" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="65" y="450" font-size="15" font-weight="700" fill="#111827">Final Decision Flow (Notebook 6)</text>
 
-  <rect class="green" x="180" y="735" width="220" height="120"/>
-  <text class="label" x="220" y="770">CORRECT</text>
-  <text class="body" x="220" y="797">At least one chunk</text>
-  <text class="body" x="220" y="819">scores &gt; 0.7</text>
-  <text class="body" x="220" y="841">Use internal good_docs only</text>
+  <!-- Step 1: Load & Index -->
+  <rect x="60" y="465" width="160" height="90" rx="10" fill="#fff" stroke="#334155" stroke-width="2"/>
+  <text x="140" y="492" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">Load &amp; Index</text>
+  <text x="140" y="512" text-anchor="middle" font-size="12" fill="#334155">PDFs → chunks</text>
+  <text x="140" y="530" text-anchor="middle" font-size="12" fill="#334155">Embed → FAISS</text>
 
-  <rect class="pink" x="490" y="735" width="220" height="120"/>
-  <text class="label" x="530" y="770">INCORRECT</text>
-  <text class="body" x="530" y="797">All chunks score &lt; 0.3</text>
-  <text class="body" x="530" y="819">Rewrite query</text>
-  <text class="body" x="530" y="841">Use web docs only</text>
+  <!-- Arrow -->
+  <path d="M220 510 H255" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arr)"/>
 
-  <rect class="accent" x="800" y="735" width="250" height="120"/>
-  <text class="label" x="845" y="770">AMBIGUOUS</text>
-  <text class="body" x="845" y="797">No chunk &gt; 0.7</text>
-  <text class="body" x="845" y="819">but not all &lt; 0.3</text>
-  <text class="body" x="845" y="841">Use good_docs + web_docs</text>
+  <!-- Step 2: Retrieve -->
+  <rect x="255" y="465" width="160" height="90" rx="10" fill="#fff" stroke="#334155" stroke-width="2"/>
+  <text x="335" y="492" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">Retrieve Top 4</text>
+  <text x="335" y="512" text-anchor="middle" font-size="12" fill="#334155">Similarity search</text>
+  <text x="335" y="530" text-anchor="middle" font-size="12" fill="#334155">over vector index</text>
 
-  <path class="arrow" d="M 560 665 L 320 735"/>
-  <path class="arrow" d="M 610 665 L 600 735"/>
-  <path class="arrow" d="M 660 665 L 900 735"/>
+  <!-- Arrow -->
+  <path d="M415 510 H455" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arr)"/>
 
-  <rect class="accent" x="485" y="885" width="240" height="60"/>
-  <text class="label" x="520" y="920">Rewrite Query -> Web Search</text>
+  <!-- Step 3: Evaluate -->
+  <rect x="455" y="455" width="210" height="110" rx="10" fill="#fff8f0" stroke="#c2410c" stroke-width="2"/>
+  <text x="560" y="480" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">Evaluate Chunks</text>
+  <text x="560" y="500" text-anchor="middle" font-size="12" fill="#334155">LLM scores 0.0–1.0</text>
+  <text x="560" y="518" text-anchor="middle" font-size="12" fill="#334155">good_docs = score &gt; 0.3</text>
+  <text x="560" y="536" text-anchor="middle" font-size="12" fill="#334155">Upper: 0.7 / Lower: 0.3</text>
 
-  <path class="arrow" d="M 600 855 L 605 885"/>
-  <path class="arrow" d="M 900 855 L 665 885"/>
+  <!-- Three branches down from Evaluate -->
+  <!-- CORRECT branch -->
+  <path d="M490 565 V600 H175 V635" stroke="#15803d" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+  <text x="310" y="597" text-anchor="middle" font-size="11" font-weight="700" fill="#15803d">CORRECT</text>
 
-  <rect class="box" x="860" y="885" width="255" height="60"/>
-  <text class="label" x="895" y="920">Refine Sentences -> Generate Answer</text>
+  <!-- INCORRECT branch -->
+  <path d="M560 565 V600 V635" stroke="#be123c" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+  <text x="590" y="597" text-anchor="middle" font-size="11" font-weight="700" fill="#be123c">INCORRECT</text>
 
-  <path class="arrow" d="M 400 795 L 860 915"/>
-  <path class="arrow" d="M 725 915 L 860 915"/>
+  <!-- AMBIGUOUS branch -->
+  <path d="M630 565 V600 H960 V635" stroke="#2563eb" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+  <text x="810" y="597" text-anchor="middle" font-size="11" font-weight="700" fill="#2563eb">AMBIGUOUS</text>
 
+  <!-- CORRECT box -->
+  <rect x="60" y="635" width="230" height="110" rx="10" fill="#f3fbf5" stroke="#15803d" stroke-width="2"/>
+  <text x="175" y="660" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">Use Internal Only</text>
+  <text x="175" y="680" text-anchor="middle" font-size="12" fill="#334155">Score ≥ 0.7 found</text>
+  <text x="175" y="698" text-anchor="middle" font-size="12" fill="#334155">Use good_docs only</text>
+  <text x="175" y="716" text-anchor="middle" font-size="12" fill="#334155">No web search needed</text>
+
+  <!-- INCORRECT box -->
+  <rect x="445" y="635" width="230" height="110" rx="10" fill="#fff5f5" stroke="#be123c" stroke-width="2"/>
+  <text x="560" y="660" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">Use Web Only</text>
+  <text x="560" y="680" text-anchor="middle" font-size="12" fill="#334155">All scores &lt; 0.3</text>
+  <text x="560" y="698" text-anchor="middle" font-size="12" fill="#334155">Rewrite query</text>
+  <text x="560" y="716" text-anchor="middle" font-size="12" fill="#334155">Search Tavily</text>
+
+  <!-- AMBIGUOUS box -->
+  <rect x="840" y="635" width="240" height="110" rx="10" fill="#f8fbff" stroke="#2563eb" stroke-width="2"/>
+  <text x="960" y="660" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">Combine Internal + Web</text>
+  <text x="960" y="680" text-anchor="middle" font-size="12" fill="#334155">No score ≥ 0.7</text>
+  <text x="960" y="698" text-anchor="middle" font-size="12" fill="#334155">Keep good_docs</text>
+  <text x="960" y="716" text-anchor="middle" font-size="12" fill="#334155">Add web_docs</text>
+
+  <!-- Arrows from INCORRECT and AMBIGUOUS to Refine+Generate -->
+  <path d="M560 745 V775" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+  <path d="M960 745 V760 H710 V775" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+
+  <!-- Refine + Generate box -->
+  <rect x="420" y="775" width="355" height="80" rx="10" fill="#fff" stroke="#334155" stroke-width="2"/>
+  <text x="597" y="802" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">Refine → Generate Answer</text>
+  <text x="597" y="822" text-anchor="middle" font-size="12" fill="#334155">Sentence filter removes noise</text>
+  <text x="597" y="840" text-anchor="middle" font-size="12" fill="#334155">Final answer from refined context</text>
+
+  <!-- Arrow from CORRECT to Generate (skip refine) -->
+  <path d="M175 745 V855 H420" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arr)"/>
 </svg>
