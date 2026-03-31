@@ -45,14 +45,16 @@ Instead of reproducing the paper exactly, this project implements the main corre
 
 ## Repository Structure
 
-- [1_basic_rag.ipynb](/Users/ayushgaur/Documents/corrective-rag-main/1_basic_rag.ipynb): basic retrieval + answer generation
-- [2_retrieval_refinement.ipynb](/Users/ayushgaur/Documents/corrective-rag-main/2_retrieval_refinement.ipynb): adds sentence-level refinement
-- [3_retrieval_evaluator.ipynb](/Users/ayushgaur/Documents/corrective-rag-main/3_retrieval_evaluator.ipynb): adds retrieval scoring and routing
-- [4_web_search_refinement.ipynb](/Users/ayushgaur/Documents/corrective-rag-main/4_web_search_refinement.ipynb): adds web fallback for incorrect retrieval
-- [5_query_rewrite.ipynb](/Users/ayushgaur/Documents/corrective-rag-main/5_query_rewrite.ipynb): improves web fallback through query rewriting
-- [6_ambiguous.ipynb](/Users/ayushgaur/Documents/corrective-rag-main/6_ambiguous.ipynb): handles ambiguous retrieval by combining internal and web evidence
-- [documents](/Users/ayushgaur/Documents/corrective-rag-main/documents): source PDFs used to build the vector store
-- [requirements.txt](/Users/ayushgaur/Documents/corrective-rag-main/requirements.txt): Python dependencies
+- [1_basic_rag.ipynb](1_basic_rag.ipynb): basic retrieval + answer generation
+- [2_retrieval_refinement.ipynb](2_retrieval_refinement.ipynb): adds sentence-level refinement
+- [3_retrieval_evaluator.ipynb](3_retrieval_evaluator.ipynb): adds retrieval scoring and routing
+- [4_web_search_refinement.ipynb](4_web_search_refinement.ipynb): adds web fallback for incorrect retrieval
+- [5_query_rewrite.ipynb](5_query_rewrite.ipynb): improves web fallback through query rewriting
+- [6_ambiguous.ipynb](6_ambiguous.ipynb): handles ambiguous retrieval by combining internal and web evidence
+- [evaluate_crag.py](evaluate_crag.py): RAGAS evaluation script comparing all 3 CRAG variants
+- [eval_data/](eval_data/): golden dataset (10 Q&A pairs) + attention paper PDF
+- [documents/](documents/): source PDFs used by the notebooks
+- [requirements.txt](requirements.txt): Python dependencies
 
 ## How The Pipeline Evolves
 
@@ -186,15 +188,57 @@ At a high level, the later notebooks follow this pattern:
 - Tavily usage is required for the web-search notebooks
 - The current implementation is better described as CRAG-inspired than paper-exact
 
-## Suggested Next Step
+## RAGAS Evaluation
 
-If you want to turn this into a more production-style project, the next step would be:
+`evaluate_crag.py` benchmarks three variants of the pipeline against a 10-question golden dataset
+(questions about the "Attention Is All You Need" paper).
 
-- extract shared logic from notebooks into Python modules
-- add a proper README-driven setup flow
-- centralize prompts and routing logic
-- add a small evaluation dataset and benchmarking script
+### Variants
+
+| Variant | Logic |
+|---------|-------|
+| **basic** | Notebook 1: retrieve top-4, answer directly, no scoring |
+| **correct** | Notebook 5: score chunks → CORRECT→internal, INCORRECT→web, AMBIGUOUS→message |
+| **full** | Notebook 6: CORRECT→internal, INCORRECT/AMBIGUOUS→web (AMBIGUOUS also uses internal) |
+
+### Results
+
+| Metric | basic | correct | full |
+|--------|-------|---------|------|
+| Faithfulness | 0.9500 | 0.8333 | 0.9000 |
+| Answer Relevancy | 0.9919 | 0.8879 | 0.9901 |
+| Context Precision | 0.7667 | 0.9000 | 0.9000 |
+| Context Recall | 0.9000 | 0.9000 | 0.8500 |
+
+**Reading the numbers:**
+- `basic` scores highest on generation metrics because the attention paper is in the index and top-4 chunks almost always contain the answer — no filtering risk.
+- `correct`/`full` win on context precision — the LLM scorer removes noisy chunks that `basic` passes through raw.
+- `correct` faithfulness dip comes from AMBIGUOUS questions returning a non-answer message instead of generating a real answer.
+- `full` is the most balanced overall — it routes AMBIGUOUS into web+internal rather than returning a message.
+
+### Comparison with LangGraph RAG (query strategy: none)
+
+| Metric | CRAG correct | LangGraph none |
+|--------|-------------|----------------|
+| Faithfulness | 0.8333 | 0.9104 |
+| Answer Relevancy | 0.8879 | 0.8628 |
+| Context Precision | 0.9000 | 0.6667 |
+| Context Recall | 0.9000 | 0.8000 |
+
+CRAG's chunk scorer clearly improves retrieval quality (+0.23 precision, +0.10 recall).
+LangGraph's higher faithfulness is mostly explained by CRAG's AMBIGUOUS penalty, not a generation quality difference.
+
+### Running the evaluation
+
+```bash
+pip install -r requirements.txt
+python evaluate_crag.py
+```
+
+`OPENAI_API_KEY` is required. `TAVILY_API_KEY` is optional — web search steps degrade gracefully if not set.
+
+Results are saved to `eval_results_crag_basic.json`, `eval_results_crag_correct.json`, `eval_results_crag_full.json`.
 
 ## Summary
 
-This repo shows the progression from basic RAG to a corrective RAG-style system that evaluates retrieval quality, refines knowledge, and uses web search when internal retrieval is weak or ambiguous.
+This repo shows the progression from basic RAG to a corrective RAG-style system that evaluates retrieval quality, refines knowledge, and uses web search when internal retrieval is weak or ambiguous. A RAGAS evaluation script quantifies the impact of each corrective step across all pipeline variants.
