@@ -7,3 +7,4 @@ langgraph
 faiss-cpu
 pypdf
 python-dotenv
+ragas
